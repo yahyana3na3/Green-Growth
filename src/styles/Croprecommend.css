@@ -1,0 +1,230 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('../images/Global-Member-Care.jpeg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+    position: relative;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: -1;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .form-container {
+    background-color:rgba(105, 100, 91, 0.485);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+    margin-top:200px; 
+    margin-left: 150px;
+    margin-bottom: 12%;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .hth-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: whitesmoke;
+  }
+  
+  .crop-form .input-group {
+    margin-bottom: 15px;
+  }
+  
+  .crop-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: whitesmoke;
+  }
+  
+  .crop-form input[type="number"] {
+    width: calc(100% - 10px);
+    padding: 8px;
+    border: 1px solid #a2a191;
+    border-radius: 5px;
+  }
+  
+  .button-container button[type="submit"] {
+    background-color: #916552;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .crop-form button[type="submit"]:hover {
+    background-color: #69433C;
+  }
+  .menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 99%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+   margin-top: 1%;
+   background-color: #a2a19112;
+  }
+  
+  .menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+  }
+  
+  .menu ul li {
+    margin-right: 20px;
+  }
+  
+  .menu ul li:last-child {
+    margin-right: 0;
+  }
+  
+  .menu ul li a {
+    text-decoration: none;
+    color: #C0BFC0;
+    font-size: 1em;
+    transition: color 0.3s ease;
+  }
+  
+  .menu ul li a:hover {
+    color: #729875;
+  }
+  
+  .menu-toggle {
+    display: none;
+  }
+  
+  @media (max-width: 768px) {
+    .menu {
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  
+    .menu ul {
+      flex-direction: column;
+      align-items: flex-end;
+      margin-top: 10px;
+    }
+  
+    .menu ul li {
+      margin: 5px 0;
+    }
+  
+    .menu-toggle {
+      display: block; 
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      cursor: pointer;
+      color: #C0BFC0;
+      font-size: 1.5em;
+    }
+  }
+  
+  .processing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(45, 44, 44, 0.366); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; 
+  }
+  
+  .processing-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1); 
+    border-top: 4px solid #3498db; 
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite; 
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .result-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; 
+  }
+  
+  .result-rectangle {
+    background-color: #9f7a69;
+    border: 2px;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 80%;
+    text-align: center;
+    position: relative;
+    height:300px;
+    width: 300px;
+    margin-top: 100px;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .close-btn:hover {
+    color: rgb(255, 8, 8);
+  }
+  
+  .result-rectangle h2 {
+    margin-bottom: 10px;
+    color: rgb(233, 224, 207);
+  }
+  
+  .result-rectangle p {
+    color: rgb(222, 212, 194);
+    font-size: 18px;
+    line-height: 1.5;
+  }
