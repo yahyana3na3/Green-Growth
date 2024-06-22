@@ -8,35 +8,16 @@ const Calendar = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventSelector, setShowEventSelector] = useState(false);
-  const [toDoList, setToDoList] = useState([]);
+  const [toDoList, setToDoList] = useState(() => {
+    const savedToDoList = localStorage.getItem('toDoList');
+    return savedToDoList ? JSON.parse(savedToDoList) : [];
+  });
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    const savedToDoList = localStorage.getItem('toDoList');
-    if (savedToDoList) {
-      setToDoList(JSON.parse(savedToDoList));
-    }
-  }, []);
-  
-
-  useEffect(() => {
     localStorage.setItem('toDoList', JSON.stringify(toDoList));
   }, [toDoList]);
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newList = toDoList.map(task => {
-        if (!task.done && new Date(task.date) < new Date()) {
-          return { ...task, done: false }; 
-        }
-        return task;
-      });
-      setToDoList(newList);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [toDoList]);
-  
 
   const handleDateClick = date => {
     setStartDate(date);
@@ -46,7 +27,12 @@ const Calendar = () => {
   const handleEventSelect = event => {
     setSelectedEvent(event);
     setShowEventSelector(false);
-    setToDoList([...toDoList, { event, date: startDate.toLocaleDateString(), done: false }]);
+    const newItem = {
+      event,
+      date: startDate.toISOString(),
+      done: false
+    };
+    setToDoList(prevList => [...prevList, newItem]);
   };
 
   const toggleSelectionMode = () => {
@@ -64,7 +50,7 @@ const Calendar = () => {
   const handleDone = (index) => {
     const newList = [...toDoList];
     newList[index].done = true;
-    newList[index].doneAt = new Date();
+    newList[index].doneAt = new Date().toISOString();
     setToDoList(newList);
   };
 
@@ -97,22 +83,24 @@ const Calendar = () => {
 
   const categorizeItems = (toDoList) => {
     const today = new Date();
-    const thisWeek = new Date();
+    const thisWeek = new Date(today);
     thisWeek.setDate(thisWeek.getDate() + 7);
-    const thisMonth = new Date();
+    const thisMonth = new Date(today);
     thisMonth.setMonth(thisMonth.getMonth() + 1);
-    const thisYear = new Date();
+    const thisYear = new Date(today);
     thisYear.setFullYear(thisYear.getFullYear() + 1);
-  
+
     const todayItems = [];
     const thisWeekItems = [];
     const thisMonthItems = [];
     const thisYearItems = [];
     const unfinishedTasks = [];
-  
+
     toDoList.forEach((item, index) => {
       const itemDate = new Date(item.date);
-      if (itemDate <= today) {
+      if (!item.done && itemDate < today) {
+        unfinishedTasks.push({ ...item, index });
+      } else if (itemDate <= today) {
         todayItems.push({ ...item, index });
       } else if (itemDate <= thisWeek) {
         thisWeekItems.push({ ...item, index });
@@ -120,11 +108,9 @@ const Calendar = () => {
         thisMonthItems.push({ ...item, index });
       } else if (itemDate <= thisYear) {
         thisYearItems.push({ ...item, index });
-      } else if (!item.done && itemDate < today) {
-        unfinishedTasks.push({ ...item, index });
       }
     });
-  
+
     return {
       'Today': todayItems,
       'This Week': thisWeekItems,
@@ -135,7 +121,6 @@ const Calendar = () => {
   };
 
   const categorizedItems = categorizeItems(toDoList);
-
 
   return (
     <div className="calendar-container">
@@ -190,7 +175,7 @@ const Calendar = () => {
                     />
                   )}
                   <span className="event-color" style={{ backgroundColor: getEventColor(event) }}></span>
-                  <span>{date}: {event}</span>
+                  <span>{new Date(date).toLocaleDateString()}: {event}</span>
                   {!done && !isSelectionMode && <button onClick={() => handleDone(index)}>Done</button>}
                 </li>
               ))}
