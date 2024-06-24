@@ -30,7 +30,22 @@ const FormComponent = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    
+    fetch('http://localhost:3000/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      // Handle success, update state, etc.
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      // Handle error
+    });
     for (let key in formData) {
       if (formData[key] === '') {
         setFormError(true);

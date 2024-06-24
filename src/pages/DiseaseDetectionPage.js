@@ -46,7 +46,7 @@ function Disease() {
     if (imageUploaded) { 
       setProcessing(true);
       setTimeout(() => {
-        const fakeResult = "Healthy"; 
+        const fakeResult = "Disease"; 
         setResult(fakeResult);
         setProcessing(false);
       }, 2500); 
