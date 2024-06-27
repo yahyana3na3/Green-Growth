@@ -1,56 +1,69 @@
 import React, { useState } from 'react';
 import '../styles/disease.css';
 import Menu from '../components/Menu';
-import { FaTimes } from 'react-icons/fa'; 
-
+import { FaTimes } from 'react-icons/fa';
+// var reader;
+var dataImage
 function Disease() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState(null);
   const [imageUploaded, setImageUploaded] = useState(false);
+  const [data, setData] = useState(null);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-
+     const reader = new FileReader();
+    
     reader.onload = (e) => {
       setUploadedImage(e.target.result);
       setImageUploaded(true); 
+      dataImage=reader;
     };
 
     reader.readAsDataURL(file);
+    
   };
 
+  
+
+
   const handleDetect = () => {
-    
-    fetch('http://localhost:3000/predict', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(uploadedImage)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-      // Handle success, update state, etc.
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      // Handle error
-    });
-
-    console.log(uploadedImage)
-
-
     if (imageUploaded) { 
       setProcessing(true);
-      setTimeout(() => {
-        const fakeResult = "Disease"; 
-        setResult(fakeResult);
+      // const formData = new FormData();
+
+      let dataForm=new FormData();
+      console.log(dataImage.result);
+      dataForm.append('image', dataImage.result);
+      // dataForm.append({'image':dataImage });
+      fetch('http://localhost:5000/predict', {
+        method: 'POST',
+        // headers: {
+        //   'Content-Type': 'multipart/form-data'
+        // },
+        body:dataForm
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+        setResult(data.result);
         setProcessing(false);
-      }, 2500); 
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setProcessing(false);
+      });
     }
+    fetch('http://localhost:5000/predict')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data['image'])
+        // setUploadedImage(data.imagePath);  // Assuming the response contains an imagePath field
+        setImageUploaded(true);
+      })
+      .catch(error => console.error('Error fetching image:', error));
+
   };
 
   const handleCloseResult = () => {
@@ -77,6 +90,7 @@ function Disease() {
         <button className="detect-btn" onClick={handleDetect} disabled={!imageUploaded || processing}>
           Detect!
         </button>
+      
       </div>
       {uploadedImage && (
         <div className={`uploaded-image-container ${processing ? 'processing' : ''}`}>

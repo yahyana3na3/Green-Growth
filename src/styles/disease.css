@@ -95,7 +95,7 @@ h1 {
   margin-top: 11vh;
 }
 
-.upload-btn, .detect-btn {
+.upload-btn, .detect-btn, .fetch-btn {
   background-color: #76885B;
   color: rgb(1, 1, 1);
   border: none;
